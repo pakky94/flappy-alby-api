@@ -1,11 +1,11 @@
 ﻿namespace FlappyAlby.API.Writers;
 
-using Dapper;
 using System.Data.SqlClient;
 using Abstract;
+using Dapper;
+using Domain;
 using Microsoft.Extensions.Options;
 using Options;
-using FlappyAlby.API.Domain;
 
 public class SqlWriter : IWriter
 {
@@ -33,6 +33,6 @@ public class SqlWriter : IWriter
     public async Task<int> DeleteByIdAsync(string query, int id)
     {
         await using var connection = new SqlConnection(_connectionString);
-        return await connection.ExecuteAsync(query, new { Id = id });
+        return await connection.ExecuteAsync(query, new {Id = id});
     }
 }

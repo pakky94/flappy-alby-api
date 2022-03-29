@@ -1,6 +1,5 @@
 ﻿namespace FlappyAlby.API.Abstract;
 
-using Domain;
 using DTOs;
 
 public interface IRankingRepository

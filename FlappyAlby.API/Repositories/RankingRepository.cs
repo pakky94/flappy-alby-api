@@ -27,7 +27,7 @@ public class RankingRepository : IRankingRepository
 
     public async Task<PlayerDto?> GetById(int id)
     {
-        const string query = $@"SELECT Name, Total as TotalMilliseconds, Id
+        const string query = @"SELECT Name, Total as TotalMilliseconds, Id
                              FROM Player
                              WHERE Id=@Id";
 
@@ -37,17 +37,17 @@ public class RankingRepository : IRankingRepository
             player.Name,
             TimeSpan.FromMilliseconds(player.TotalMilliseconds),
             player.Id
-            );
+        );
         return playerDto;
     }
 
     public async Task<bool> Create(PlayerDto player)
     {
-        const string query = $@"INSERT INTO Player(Name, Total)
+        const string query = @"INSERT INTO Player(Name, Total)
                              OUTPUT inserted.Id
                              VALUES (@Name, @TotalMilliseconds)";
 
-        var playerEntity = new Player(player.Name, (long)player.Total.TotalMilliseconds, player.Id);
+        var playerEntity = new Player(player.Name, (long) player.Total.TotalMilliseconds, player.Id);
         _ = await _writer.CreateAsync(query, playerEntity);
         return true;
     }

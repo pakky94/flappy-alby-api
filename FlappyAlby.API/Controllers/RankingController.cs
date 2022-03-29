@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace FlappyAlby.API.Controllers;
 
-using Bogus;
-using DTOs;
 using Abstract;
+using DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("[controller]")]
@@ -41,7 +39,7 @@ public class RankingController : ControllerBase
             _ = await _rankingRepository.Create(player);
             return Ok();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return Problem(e.Message, statusCode: StatusCodes.Status500InternalServerError);
         }
