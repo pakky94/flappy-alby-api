@@ -4,32 +4,46 @@ namespace FlappyAlby.API.Controllers;
 
 using Bogus;
 using DTOs;
+using Abstract;
 
 [ApiController]
 [Route("[controller]")]
 public class RankingController : ControllerBase
 {
-   private readonly ILogger<RankingController> _logger;
+    private readonly ILogger<RankingController> _logger;
+    private readonly IRankingRepository _rankingRepository;
 
-    public RankingController(ILogger<RankingController> logger)
+    public RankingController(IRankingRepository rankingRepository, ILogger<RankingController> logger)
     {
+        _rankingRepository = rankingRepository;
         _logger = logger;
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> GetAsync()
     {
-        var faker = new Faker();
-        var result = Enumerable.Range(1, 5)
-            .Select((index, index1) => new PlayerDto(faker.Name.FirstName(), faker.Date.Timespan(TimeSpan.FromMinutes(5)), index + index1))
-            .OrderBy(player => player.Total);
-
-        return Ok(result);
+        try
+        {
+            var result = await _rankingRepository.GetTop10();
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message, statusCode: StatusCodes.Status500InternalServerError);
+        }
     }
-    
+
     [HttpPost]
-    public IActionResult Post([FromBody] PlayerDto player)
+    public async Task<IActionResult> Post([FromBody] PlayerDto player)
     {
-        return Ok();
+        try
+        {
+            _ = await _rankingRepository.Create(player);
+            return Ok();
+        }
+        catch(Exception e)
+        {
+            return Problem(e.Message, statusCode: StatusCodes.Status500InternalServerError);
+        }
     }
 }
