@@ -3,6 +3,7 @@
     #schema;
     #onStepOver;
     #lastTimestamp;
+    #player
 
     #blocks = [];
 
@@ -12,9 +13,11 @@
         this.#onStepOver = onStepOver;
     }
 
-    start(playerCoordinate, steps) {
+    start(player, steps) {
+        this.#player = player;
+        let playerCoordinate = player.coordinate;
         this.#build(playerCoordinate);
-        
+
         window.requestAnimationFrame(timestamp => this.#animate(timestamp, playerCoordinate, steps));
     }
 
@@ -31,11 +34,12 @@
     }
 
     #animate = (timestamp, playerCoordinate, steps = 1) => {
-        
         this.#lastTimestamp = this.#lastTimestamp ?? timestamp;
-        
+
         let timestep = timestamp - this.#lastTimestamp;
         this.#lastTimestamp = timestamp;
+
+        this.#player.animate();
 
         if (this.#blocks.length <= 0) return;
 

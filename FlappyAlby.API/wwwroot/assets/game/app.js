@@ -8,6 +8,7 @@ import {LivesService} from "./services/livesService.js";
 import {StatisticsService} from "./services/statisticsService.js";
 import {HttpService} from "./services/httpService.js";
 import {RankingService} from "./services/rankingService.js";
+import {KeyboardService} from "./services/keyboardService.js";
 
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
@@ -31,7 +32,7 @@ import {RankingService} from "./services/rankingService.js";
         for (let i = 1; i < 6; i++) {
             const playerSide = areaCoordinate.width / 20;
             const playerCoordinate = new Coordinate((areaCoordinate.height - playerSide) / 2, areaCoordinate.width * .1, playerSide, playerSide);
-            levelsOptions.push(new Option(playerCoordinate, i / 2, i > 2 ? 8 : 5, i * 10000));
+            levelsOptions.push(new Option(playerCoordinate, i / 2, i > 2 ? 5 : 3, i * 10000));
         }
 
         const statisticsService = new StatisticsService(area.coordinate, html_speed, html_percentage);
@@ -39,9 +40,10 @@ import {RankingService} from "./services/rankingService.js";
         const levelService = new LevelService(html_level, levelsOptions);
         const livesService = new LivesService(html_lives);
         const httpService = new HttpService();
+        const keyboardService = new KeyboardService();
         const rankingService = new RankingService(html_ranking, httpService, 'https://localhost:7126/ranking');
 
-        const game = new Game(area, statisticsService, overlayService, levelService, livesService, rankingService);
+        const game = new Game(area, statisticsService, overlayService, levelService, livesService, rankingService, keyboardService);
         html_start_button.onclick = () => game.nextLevel(html_player_name_input.value)();
     });
 })();

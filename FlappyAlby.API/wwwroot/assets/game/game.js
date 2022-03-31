@@ -13,12 +13,13 @@ export class Game {
     #levelService;
     #livesService;
     #rankingService;
+    #keyboardService;
 
     #stopwatch;
 
     #playerName;
 
-    constructor(area, statisticsService, overlayService, levelService, livesService, rankingService) {
+    constructor(area, statisticsService, overlayService, levelService, livesService, rankingService, keyboardService) {
         this.#area = area;
 
         this.#statisticsService = statisticsService;
@@ -26,6 +27,7 @@ export class Game {
         this.#levelService = levelService;
         this.#livesService = livesService;
         this.#rankingService = rankingService;
+        this.#keyboardService = keyboardService;
     }
 
     nextLevel(playerName) {
@@ -37,7 +39,7 @@ export class Game {
         }
 
         const options = this.#levelService.currentOptions;
-        this.#player = new Player(this.#area, options.coordinate, options.playerSteps);
+        this.#player = new Player(this.#keyboardService, this.#area, options.coordinate, options.playerSteps);
 
         const schema = BarrierSchema.build;
         this.#ai = new Ai(this.#area, schema, this.#onStepOver);
@@ -49,7 +51,7 @@ export class Game {
 
             this.#statisticsService.start();
             this.#stopwatch.start(options.finalTime);
-            this.#ai.start(this.#player.coordinate, options.steps);
+            this.#ai.start(this.#player, options.steps);
         }
     }
 
